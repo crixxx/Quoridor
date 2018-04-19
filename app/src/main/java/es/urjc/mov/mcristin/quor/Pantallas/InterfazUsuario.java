@@ -82,7 +82,7 @@ public class InterfazUsuario extends AppCompatActivity {
     }
 
     // Pinta el tablero que se le pase
-    private void redibujaTablero(Casilla[][] newTab) {
+    private Casilla[][] redibujaTablero(Casilla[][] newTab) {
 
         Log.d(TAG, "***********************************************************");
 
@@ -90,9 +90,10 @@ public class InterfazUsuario extends AppCompatActivity {
             for(int j = 0 ; j < COLUMNAS; j++){
                 Casilla.Estado est = newTab[i][j].getEstadoCasilla();
                 int draw = getCasillaDrawable(est);
-                tablero[i][j].setBackgroundResource(draw);
+                newTab[i][j].setBackgroundResource(draw);
             }
         }
+        return newTab;
     }
 
     //Dibuja imagen segun indice de estado
@@ -109,24 +110,17 @@ public class InterfazUsuario extends AppCompatActivity {
 
     //BOTON JUGAR
     public class EmpezarPartida implements View.OnClickListener{
-
         @Override
         public void onClick(View v) {
             Log.d(TAG, "coorIni: " + coorIni.x + " coorINi Y: " + coorIni.y);
-            posicionJugador = new Casilla(InterfazUsuario.this, coorIni, MI_FICHA);
-            posicionIA = new Casilla(InterfazUsuario.this, coorIniIA, FICHA_IA);
             Casilla auxTab[][];
 
-            int p = 0;
-            tablero = reiniciaTablero();
+            //tablero = juego.reiniciaPartida(InterfazUsuario.this, tablero);
             Log.d(TAG, "Tablero " + tablero[3][3].estadoCasilla);
             auxTab = reiniciaTablero();
 
             newTab = juego.IniciaPartida(InterfazUsuario.this,auxTab);
             //newTab = IA.iniciaPartida(InterfazUsuario.this, newTab);
-
-            tablero = newTab;
-            redibujaTablero(tablero);
             esInicio = false;
             ImageView imgMiFicha = findViewById(R.id.userIcon);
             ImageView imgIAFicha = findViewById(R.id.iAIcon);
@@ -137,6 +131,8 @@ public class InterfazUsuario extends AppCompatActivity {
             tablero = newTab;
 
             botonJugar = true;
+            tablero = redibujaTablero(newTab);
+
         }
     }
 
@@ -180,7 +176,7 @@ public class InterfazUsuario extends AppCompatActivity {
                     msg = makeText(InterfazUsuario.this, "Has ganado!", Toast.LENGTH_LONG);
                     msg.show();
                     tablero = reiniciaTablero();
-                    newTab = juego.reiniciaPartida(tablero, InterfazUsuario.this);
+                    newTab = juego.reiniciaPartida(InterfazUsuario.this, tablero);
                     redibujaTablero(newTab);
                     tablero = newTab;
                 }else{
@@ -198,7 +194,7 @@ public class InterfazUsuario extends AppCompatActivity {
                         msg = makeText(InterfazUsuario.this, "Oh!Has perdido!", Toast.LENGTH_LONG);
                         msg.show();
                         tablero = reiniciaTablero();
-                        newTab = juego.reiniciaPartida(tablero, InterfazUsuario.this);
+                        newTab = juego.reiniciaPartida(InterfazUsuario.this,tablero);
                         redibujaTablero(newTab);
                         tablero = newTab;
                     }
@@ -208,13 +204,11 @@ public class InterfazUsuario extends AppCompatActivity {
     }
 
     private Casilla[][] reiniciaTablero() {
-
         for(int i = 0; i < FILAS; i++){
             for(int j = 0 ; j < COLUMNAS; j++){
                 tablero[i][j].setEstadoCasilla(LIBRE);
             }
         }
-
         return tablero;
     }
 
@@ -278,6 +272,9 @@ public class InterfazUsuario extends AppCompatActivity {
 
         }else{
             dibujaTableroInicio();
+            tablero = juego.reiniciaPartida(this, tablero);
+            posicionJugador = new Casilla(InterfazUsuario.this, coorIni, MI_FICHA);
+            posicionIA = new Casilla(InterfazUsuario.this, coorIniIA, FICHA_IA);
         }
 
     }
@@ -358,8 +355,12 @@ public class InterfazUsuario extends AppCompatActivity {
         tablero = tabAux;
     }
 
-    private void dibujaTableroInicio() {
+    private void redrawEverything(TableLayout tableLayout) {
+        tableLayout.invalidate();
+        tableLayout.refreshDrawableState();
+    }
 
+    private void dibujaTableroInicio() {
         //Creamos la tabla
         TableRow[] tr = new TableRow[dimension];
         TableLayout tl = (TableLayout)findViewById(R.id.tableLayout);

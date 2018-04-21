@@ -9,6 +9,8 @@ import es.urjc.mov.mcristin.quor.ModoDeJuegoIA.JuegoAleatorio;
 import es.urjc.mov.mcristin.quor.Pantallas.InterfazUsuario;
 import es.urjc.mov.mcristin.quor.Tablero.Casilla;
 import es.urjc.mov.mcristin.quor.Tablero.Coordenadas;
+
+import static es.urjc.mov.mcristin.quor.Tablero.Casilla.Estado.LIBRE;
 import static es.urjc.mov.mcristin.quor.Tablero.Tablero.COLUMNAS;
 import static es.urjc.mov.mcristin.quor.Tablero.Tablero.FILAS;
 
@@ -31,8 +33,8 @@ public class Juego {
         return posiblesMovs;
     }
 
-    public Casilla[][] build(Context contexto){
-        Casilla tab[][] = new Casilla[FILAS][COLUMNAS];
+    public Casilla[][] build(Context contexto, Casilla[][] tablero){
+
         Coordenadas miFicha = new Coordenadas(FILAS-1,COLUMNAS-1);
         Coordenadas fichaIA = new Coordenadas(0,0);
         miCasillaAnterior = new Casilla(contexto, miFicha, Casilla.Estado.LIBRE);
@@ -40,7 +42,7 @@ public class Juego {
 
         for(int i = 0; i < FILAS; i++){
             for(int j = 0 ; j < COLUMNAS; j++){
-                Casilla c = tab[i][j];
+                Casilla c = tablero[i][j];
                 if(c.equals(miCasillaAnterior)){
                     c.setEstadoCasilla(Casilla.Estado.MI_FICHA);
                     miCasillaAnterior = c;
@@ -52,7 +54,22 @@ public class Juego {
                 }
             }
         }
-        return tab;
+        return tablero;
+    }
+
+    public Casilla[][] reiniciaTablero(Context context) {
+        Casilla[][] tablero = new Casilla[FILAS][COLUMNAS];
+        for(int i = 0; i < FILAS; i++){
+            for(int j = 0 ; j < COLUMNAS; j++){
+                Coordenadas c = new Coordenadas(i,j);
+                Casilla casilla = new Casilla(context,c, LIBRE);
+
+                tablero[i][j] = casilla;
+
+            }
+        }
+
+        return tablero;
     }
 
     public Casilla[][] IniciaPartida(InterfazUsuario context, Casilla[][] tab) {
@@ -233,8 +250,7 @@ public class Juego {
 
     public Casilla[][] reiniciaPartida(Casilla[][] tablero, InterfazUsuario contexto) {
         Casilla newTab[][];
-        newTab = build(contexto);
-        //newTab = IA.iniciaPartida(contexto, newTab);
+        newTab = reiniciaTablero(contexto);
         return newTab;
     }
 }

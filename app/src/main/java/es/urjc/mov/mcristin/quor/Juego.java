@@ -33,7 +33,8 @@ public class Juego {
         return posiblesMovs;
     }
 
-    public Casilla[][] build(Context contexto, Casilla[][] tab){
+    public Casilla[][] build(Context contexto, Casilla[][] tablero){
+
         Coordenadas miFicha = new Coordenadas(FILAS-1,COLUMNAS-1);
         Coordenadas fichaIA = new Coordenadas(0,0);
         miCasillaAnterior = new Casilla(contexto, miFicha, Casilla.Estado.LIBRE);
@@ -41,20 +42,34 @@ public class Juego {
 
         for(int i = 0; i < FILAS; i++){
             for(int j = 0 ; j < COLUMNAS; j++){
-                Casilla cas = tab[i][j];
-                Coordenadas c = cas.getCoordenadas();
-                if(c.equals(miCasillaAnterior.getCoordenadas())){
-                    cas.setEstadoCasilla(Casilla.Estado.MI_FICHA);
-                    miCasillaAnterior = cas;
-                }else if(c.equals(casillaAnteriorIA.getCoordenadas())){
-                    cas.setEstadoCasilla(Casilla.Estado.FICHA_IA);
-                    casillaAnteriorIA = cas;
+                Casilla c = tablero[i][j];
+                if(c.equals(miCasillaAnterior)){
+                    c.setEstadoCasilla(Casilla.Estado.MI_FICHA);
+                    miCasillaAnterior = c;
+                }else if(c.equals(casillaAnteriorIA)){
+                    c.setEstadoCasilla(Casilla.Estado.FICHA_IA);
+                    casillaAnteriorIA = c;
                 }else{
-                    cas.setEstadoCasilla(Casilla.Estado.LIBRE);
+                    c.setEstadoCasilla(Casilla.Estado.LIBRE);
                 }
             }
         }
-        return tab;
+        return tablero;
+    }
+
+    public Casilla[][] reiniciaTablero(Context context) {
+        Casilla[][] tablero = new Casilla[FILAS][COLUMNAS];
+        for(int i = 0; i < FILAS; i++){
+            for(int j = 0 ; j < COLUMNAS; j++){
+                Coordenadas c = new Coordenadas(i,j);
+                Casilla casilla = new Casilla(context,c, LIBRE);
+
+                tablero[i][j] = casilla;
+
+            }
+        }
+
+        return tablero;
     }
 
     public Casilla[][] IniciaPartida(InterfazUsuario context, Casilla[][] tab) {
@@ -233,15 +248,9 @@ public class Juego {
         return esGanador;
     }
 
-    public Casilla[][] reiniciaPartida(Context context, Casilla[][] tablero) {
-        for(int i = 0;i < FILAS;i++) {
-            for (int j = 0; j < COLUMNAS; j++) {
-                Coordenadas c = new Coordenadas(i, j);
-                Casilla casilla = new Casilla(context, c, LIBRE);
-                tablero[i][j] = casilla;
-            }
-        }
-
-        return build(context, tablero);
+    public Casilla[][] reiniciaPartida(Casilla[][] tablero, InterfazUsuario contexto) {
+        Casilla newTab[][];
+        newTab = reiniciaTablero(contexto);
+        return newTab;
     }
 }

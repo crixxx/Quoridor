@@ -2,12 +2,17 @@ package es.urjc.mov.mcristin.quor.Tablero;
 
 import android.util.Log;
 
+import es.urjc.mov.mcristin.quor.Pantallas.InterfazUsuario;
+
+import static es.urjc.mov.mcristin.quor.Tablero.Casilla.Estado.FICHA_IA;
+import static es.urjc.mov.mcristin.quor.Tablero.Casilla.Estado.MI_FICHA;
+
 /**
  * Created by crixx on 7/04/18.
  */
 
 public class Tablero {
-    public static final int FILAS = 4;
+    public static final int FILAS = 6;
     public static final int COLUMNAS = 4;
 
     public Casilla[][] tablero;
@@ -26,8 +31,9 @@ public class Tablero {
             }
         }
         Log.d(TAG, "======================");
-
     }
+
+
 
 
 }

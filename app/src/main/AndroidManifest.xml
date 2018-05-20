@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Pantallas.InterfazUsuario"
+            android:name=".Pantallas.Login"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,6 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Pantallas.MenuInstrucciones"></activity>
+        <activity android:name=".Pantallas.InterfazUsuario"></activity>
+
     </application>
 
 </manifest>

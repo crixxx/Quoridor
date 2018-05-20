@@ -20,6 +20,7 @@ import es.urjc.mov.mcristin.quor.ModoDeJuegoIA.ModoDeJuegoIA;
 import es.urjc.mov.mcristin.quor.R;
 import es.urjc.mov.mcristin.quor.Tablero.Casilla;
 import es.urjc.mov.mcristin.quor.Tablero.Coordenadas;
+import es.urjc.mov.mcristin.quor.Tablero.Tablero;
 
 import static android.widget.Toast.makeText;
 import static es.urjc.mov.mcristin.quor.Tablero.Casilla.Estado.FICHA_IA;
@@ -31,11 +32,8 @@ import static es.urjc.mov.mcristin.quor.Tablero.Tablero.FILAS;
 
 public class InterfazUsuario extends AppCompatActivity {
 
-    /*public static final int FILAS = 4;
-    public static final int COLUMNAS = 4;*/
     private static final String TAG = "USER --> ";
 
-    int dimension = FILAS * COLUMNAS;
     boolean esInicio = true;
 
     Casilla tablero[][] = new Casilla[FILAS][COLUMNAS];
@@ -96,15 +94,15 @@ public class InterfazUsuario extends AppCompatActivity {
 
     private void inicializarPosiciones() {
         Coordenadas ini = new Coordenadas(FILAS - 1, COLUMNAS - 1);
-        posicionIA = new Casilla(InterfazUsuario.this, ini, FICHA_IA);
+        Coordenadas ini2 = new Coordenadas(0, 0);
 
-        ini = new Coordenadas(0, 0);
+        posicionIA = new Casilla(InterfazUsuario.this, ini2, FICHA_IA);
         posicionJugador = new Casilla(InterfazUsuario.this, ini, MI_FICHA);
     }
 
     public void asignarIniciales(){
-        tablero[posicionIA.getCoordenadas().getX()][posicionIA.getCoordenadas().getY()].setEstadoCasilla(posicionIA.getEstadoCasilla());
-        tablero[posicionJugador.getCoordenadas().getX()][posicionJugador.getCoordenadas().getY()].setEstadoCasilla(posicionJugador.getEstadoCasilla());
+        tablero[posicionIA.getCoordenadas().x][posicionIA.getCoordenadas().y].setEstadoCasilla(posicionIA.getEstadoCasilla());
+        tablero[posicionJugador.getCoordenadas().x][posicionJugador.getCoordenadas().y].setEstadoCasilla(posicionJugador.getEstadoCasilla());
     }
 
     //Recuperar estado
@@ -192,7 +190,7 @@ public class InterfazUsuario extends AppCompatActivity {
         //Pinta nuevo tablero
         Casilla tabAux[][] = new Casilla[FILAS][COLUMNAS];
 
-        TableRow[] tr = new TableRow[dimension];
+        TableRow[] tr = new TableRow[FILAS*COLUMNAS];
         TableLayout tl = (TableLayout) findViewById(R.id.tableLayout);
 
         // Limpiar tablero
@@ -265,7 +263,7 @@ public class InterfazUsuario extends AppCompatActivity {
         tl.removeAllViews();
 
         //Creamos la tabla
-        TableRow[] tr = new TableRow[dimension];
+        TableRow[] tr = new TableRow[FILAS*COLUMNAS];
 
         Button bJugar = (Button) findViewById(R.id.bJugar);
         bJugar.setOnClickListener(new EmpezarPartida());
@@ -330,17 +328,7 @@ public class InterfazUsuario extends AppCompatActivity {
             inicializarPosiciones();
             guardarEstadoPartida(true);
 
-            //Log.d(TAG, "coorIni: " + coorIni.x + " coorINi Y: " + coorIni.y);
-            //posicionJugador = new Casilla(InterfazUsuario.this, coorIni, MI_FICHA);
-            //posicionIA = new Casilla(InterfazUsuario.this, coorIniIA, FICHA_IA);
-
-//            tablero = juego.reiniciaTablero(InterfazUsuario.this);
-//            Log.d(TAG, "Tablero " + tablero[3][3].estadoCasilla);
-//            auxTab = juego.reiniciaTablero(InterfazUsuario.this);
-
             newTab = juego.IniciaPartida(InterfazUsuario.this, tablero);
-            //newTab = IA.iniciaPartida(InterfazUsuario.this, newTab);
-
             tablero = newTab;
             asignarIniciales();
             redibujaTablero(tablero);
@@ -352,6 +340,7 @@ public class InterfazUsuario extends AppCompatActivity {
             imgIAFicha.setVisibility(View.INVISIBLE);
             newTab = tablero;
             tablero = newTab;
+            Log.d(TAG, "POSICIONES DE FICHAS: " + tablero.toString());
 
         }
     }

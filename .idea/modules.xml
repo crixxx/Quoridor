@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Quor.iml" filepath="$PROJECT_DIR$/Quor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/QuoridorV1.iml" filepath="$PROJECT_DIR$/QuoridorV1.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
